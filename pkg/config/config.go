@@ -4,9 +4,13 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
+
+	"github.com/workfoxes/calypso/pkg/log"
 )
 
 var C *Config
+
+var config map[string]interface{}
 
 type Config struct {
 	TraderKey          string `json:"TraderKey"`
@@ -25,9 +29,35 @@ func GetConfig() *Config {
 	if !ok {
 		env = "Dev"
 	}
-	var config Config
+	var _config Config
 	data, _ := ioutil.ReadFile(DefaultConfigFileName)
 	_ = json.Unmarshal(data, &config)
-	config.Env = env
-	return &config
+	_ = json.Unmarshal(data, &_config)
+	config["Env"] = env
+	return &_config
+}
+
+func Get(key string) interface{} {
+	return config[key]
+}
+
+func GetDefault(key string, _default interface{}) interface{} {
+	_value := Get(key)
+	if _value == nil {
+		return _default
+	}
+	return _value
+}
+
+func GetBool(key string) bool {
+	return Get(key).(bool)
+}
+
+func GetEnv(key string) string {
+	env, ok := os.LookupEnv(key)
+	if !ok {
+		log.Panic("ENV not found %s", key)
+		return ""
+	}
+	return env
 }
