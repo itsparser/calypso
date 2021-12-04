@@ -6,26 +6,17 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	"github.com/workfoxes/calypso/pkg/config"
-	"github.com/workfoxes/calypso/pkg/constant"
 	"github.com/workfoxes/calypso/pkg/log"
-	"github.com/workfoxes/calypso/pkg/utils"
 )
 
 var DB *gorm.DB
 
-func getDSN() string {
-	dsn := utils.StringFormat(constant.DB_DSN,
-		config.Get(constant.DB_HOST),
-		config.Get(constant.DB_USER),
-		config.Get(constant.DB_PASSWORD),
-		config.Get(constant.DB_NAME),
-		config.Get(constant.DB_PORT),
-		config.GetDefault(constant.DB_SSL, "disable"))
-	return dsn
+type Database struct {
+	DB *gorm.DB
 }
 
-func Init() {
+func Init() *gorm.DB {
+	log.Info(getDSN())
 	DB, err := gorm.Open(postgres.Open(getDSN()), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Error while connect to the database : ", err)
@@ -43,6 +34,7 @@ func Init() {
 
 	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
 	pgDB.SetConnMaxLifetime(time.Hour)
+	return DB
 }
 
 func Begin() *gorm.DB {

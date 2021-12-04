@@ -2,15 +2,16 @@ package config
 
 import (
 	"encoding/json"
+	"github.com/workfoxes/calypso/pkg/log"
 	"io/ioutil"
 	"os"
-
-	"github.com/workfoxes/calypso/pkg/log"
 )
 
 var C *Config
 
-var config map[string]interface{}
+var (
+	config = make(map[string]interface{})
+)
 
 type Config struct {
 	TraderKey          string `json:"TraderKey"`
@@ -30,11 +31,22 @@ func GetConfig() *Config {
 		env = "Dev"
 	}
 	var _config Config
-	data, _ := ioutil.ReadFile(DefaultConfigFileName)
+	data, err := ioutil.ReadFile(DefaultConfigFileName)
+	if err != nil {
+		log.Fatal(err)
+	}
 	_ = json.Unmarshal(data, &config)
 	_ = json.Unmarshal(data, &_config)
 	config["Env"] = env
 	return &_config
+}
+
+func GetValue(key string) string {
+	return (config[key]).(string)
+}
+
+func GetFloat(key string) float64 {
+	return (config[key]).(float64)
 }
 
 func Get(key string) interface{} {

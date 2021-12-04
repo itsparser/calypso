@@ -1,6 +1,9 @@
 package calypso
 
 import (
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/workfoxes/calypso/pkg/client/db"
+	"gorm.io/gorm"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -10,6 +13,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/pprof"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	_logger "github.com/sirupsen/logrus"
 	"go.uber.org/dig"
@@ -36,11 +40,15 @@ func New(config *ApplicationConfig) *ApplicationServer {
 func DefaultProviders(app *ApplicationServer) {
 	app.AddProvider(config.GetConfig)
 	app.AddProvider(log.Init)
+	app.AddProvider(db.Init)
 	app.Invoker(func(l *_logger.Logger) {
-		log.L = *l
+		log.Info("logger is setup")
 	})
 	app.Invoker(func(_config *config.Config) {
 		config.C = _config
+	})
+	app.Invoker(func(DB *gorm.DB) {
+		db.DB = DB
 	})
 }
 
@@ -84,7 +92,17 @@ func (app *ApplicationServer) LoadDefaultMiddleware() {
 	app.Use(csrf.New())
 	app.Use(pprof.New())
 	app.Use(requestid.New())
+	app.Use(recover.New())
 	app.Use(compress.New(compress.Config{Level: compress.LevelBestCompression}))
+	app.Use(cors.New(cors.Config{
+		Next:             nil,
+		AllowOrigins:     "*",
+		AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH",
+		AllowHeaders:     "Origin, Content-Type, Accept",
+		AllowCredentials: false,
+		ExposeHeaders:    "",
+		MaxAge:           0,
+	}))
 
 }
 
@@ -93,7 +111,7 @@ func (app *ApplicationServer) Use(args ...interface{}) {
 	app.Server.Use(args...)
 }
 
-// Start : Will Start the Application service for the Thermite
+// Start : Will Start the Application service for the Calypso
 func (app *ApplicationServer) Start() {
 	_port := strconv.Itoa(app.Port)
 	err := app.Server.Listen(":" + _port)

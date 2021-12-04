@@ -57,5 +57,3 @@ func BadRequestError(message string) *BaseError {
 func UnauthorizedError(message string) *BaseError {
 	return &BaseError{msg: message, Code: http.StatusUnauthorized}
 }
-
-

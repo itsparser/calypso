@@ -7,6 +7,7 @@ require (
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/gofiber/fiber/v2 v2.21.0
 	github.com/klauspost/compress v1.13.6 // indirect
+	github.com/lestrrat-go/backoff/v2 v2.0.8 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/teris-io/shortid v0.0.0-20201117134242-e59966efd125 // indirect

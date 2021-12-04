@@ -2,12 +2,12 @@ package constant
 
 // Environment variables used by the application.
 const (
-	DB_HOST     = "DB_HOST"
-	DB_USER     = "DB_USER"
-	DB_PASSWORD = "DB_PASSWORD"
-	DB_PORT     = "DB_PORT"
-	DB_NAME     = "DB_NAME"
-	DB_SSL      = "DB_SSL"
-	REDIS_HOST  = "REDIS_HOST"
-	REDIS_PORT  = "REDIS_PORT"
+	DbHost        = "DB_HOST"
+	DbUser        = "DB_USER"
+	DbPassword    = "DB_PASSWORD"
+	DbPort        = "DB_PORT"
+	DbName        = "DB_NAME"
+	DbSsl         = "DB_SSL"
+	RedisHost     = "REDIS_HOST"
+	RedisPassword = "REDIS_PASSWORD"
 )
