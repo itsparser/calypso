@@ -13,7 +13,10 @@ func New(config ...Config) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		// Don't execute middleware if Next returns true
 		if cfg.PreRequest != nil {
-			cfg.PreRequest(c)
+			err := cfg.PreRequest(c)
+			if err != nil {
+				return err
+			}
 		}
 		// Continue stack
 		if err := c.Next(); err != nil {
@@ -21,7 +24,10 @@ func New(config ...Config) fiber.Handler {
 		}
 		// Don't execute middleware if Next returns true
 		if cfg.PostRequest != nil {
-			cfg.PostRequest(c)
+			err := cfg.PostRequest(c)
+			if err != nil {
+				return err
+			}
 		}
 		// Continue stack
 		return nil
