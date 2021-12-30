@@ -1,11 +1,8 @@
 package worker
 
 import (
-	"github.com/go-redis/redis/v8"
-	_logger "github.com/sirupsen/logrus"
 	"go.uber.org/dig"
 
-	_redis "github.com/workfoxes/calypso/pkg/client/redis"
 	"github.com/workfoxes/calypso/pkg/config"
 	"github.com/workfoxes/calypso/pkg/log"
 )
@@ -27,16 +24,16 @@ func New(name string) *Worker {
 func DefaultProviders(worker *Worker) {
 	worker.AddProvider(config.GetConfig)
 	worker.AddProvider(log.Init)
-	worker.AddProvider(_redis.New)
-	worker.Invoker(func(l _logger.Logger) {
-		log.L = l
-	})
+	//worker.AddProvider(_redis.New)
+	//worker.Invoker(func(l _logger.Logger) {
+	//	log.L = l
+	//})
 	worker.Invoker(func(_config *config.Config) {
 		config.C = _config
 	})
-	worker.Invoker(func(r *redis.Client) {
-		_redis.R = r
-	})
+	//worker.Invoker(func(r *redis.Client) {
+	//	_redis.R = r
+	//})
 }
 
 // AddProvider : This will add new provider to the server container

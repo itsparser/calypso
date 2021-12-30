@@ -2,6 +2,7 @@ package constant
 
 // Environment variables used by the application.
 const (
+	ENV           = "ENV"
 	DbHost        = "DB_HOST"
 	DbUser        = "DB_USER"
 	DbPassword    = "DB_PASSWORD"

@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"github.com/workfoxes/calypso/pkg/log"
 	"io/ioutil"
 	"os"
 )
@@ -33,7 +32,7 @@ func GetConfig() *Config {
 	var _config Config
 	data, err := ioutil.ReadFile(DefaultConfigFileName)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	_ = json.Unmarshal(data, &config)
 	_ = json.Unmarshal(data, &_config)
@@ -43,6 +42,13 @@ func GetConfig() *Config {
 
 func GetValue(key string) string {
 	return (config[key]).(string)
+}
+
+func GetDefaultValue(key string, _default string) string {
+	if config[key] != nil {
+		return (config[key]).(string)
+	}
+	return _default
 }
 
 func GetFloat(key string) float64 {
@@ -65,11 +71,13 @@ func GetBool(key string) bool {
 	return Get(key).(bool)
 }
 
-func GetEnv(key string) string {
+func GetEnv(key string, _default string) string {
 	env, ok := os.LookupEnv(key)
 	if !ok {
-		log.Panic("ENV not found %s", key)
-		return ""
+		if _default != "" {
+			return _default
+		}
+		panic(key)
 	}
 	return env
 }
