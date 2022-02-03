@@ -4,13 +4,11 @@ go 1.16
 
 require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
-	github.com/deepmap/oapi-codegen v1.9.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.4
-	github.com/gofiber/fiber/v2 v2.21.0
-	github.com/influxdata/influxdb-client-go/v2 v2.6.0 // indirect
-	github.com/influxdata/line-protocol v0.0.0-20210922203350-b1ad95c89adf // indirect
+	github.com/gofiber/fiber/v2 v2.26.0
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/lestrrat-go/backoff/v2 v2.0.8
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/teris-io/shortid v0.0.0-20201117134242-e59966efd125 // indirect
 	github.com/ventu-io/go-shortid v0.0.0-20201117134242-e59966efd125
